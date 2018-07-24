@@ -19,7 +19,15 @@
   },
   "devDependencies": {
     "@google-cloud/nodejs-repo-tools": "2.1.1",
-    "ava": "0.23.0"
+    "ava": "0.23.0",
+    "eslint": "^4.18.2",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-prettier": "^2.6.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "eslint-plugin-node": "^6.0.1",
+    "eslint-config-standard": "^11.0.0",
+    "eslint-plugin-import": "^2.9.0",
+    "eslint-plugin-promise": "^3.6.0"
   },
   "optionalDependencies": {
     "canvas": "1.6.5"

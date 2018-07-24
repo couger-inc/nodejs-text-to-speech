@@ -28,11 +28,11 @@ const client = new textToSpeech.TextToSpeechClient();
 const csvParse = require('csv-parse');
 let rs = null;
 try {
-  rs = fs.createReadStream('audio_list_20180619_1.tsv', 'utf-8');
+  rs = fs.createReadStream('audio_list_jp_20180720_1.tsv', 'utf-8');
   rs.on('error', err => {
     console.error(err);
     throw err;
-  });
+  })
 } catch (err) {
   console.error(err);
   throw err;
@@ -45,9 +45,12 @@ parser.on('data', data => {
       text: data[1],
     },
     voice: {
-      languageCode: 'en-us',
-      name: 'en-US-Wavenet-C',
+      languageCode: 'ja-JP',
+      name: 'ja-JP-Wavenet-A',
       ssmlGender: 'FEMALE',
+      // languageCode: 'en-us',
+      // name: 'en-US-Wavenet-C',
+      // ssmlGender: 'FEMALE',
     },
     audioConfig: {
       audioEncoding: 'MP3',
@@ -57,21 +60,21 @@ parser.on('data', data => {
   client.synthesizeSpeech(request, (err, response) => {
     if (err) {
       console.error('ERROR:', err);
-      return;
+      return
     }
 
     // Write the binary audio content to a local file
     fs.writeFile(outputfile, response.audioContent, 'binary', err => {
       if (err) {
         console.error('ERROR:', err);
-        return;
+        return
       }
       console.log(`Audio content written to file: ${outputfile}`);
-    });
+    })
   });
-});
+})
 parser.on('error', err => {
   console.error(err);
   throw err;
-});
+})
 rs.pipe(parser);

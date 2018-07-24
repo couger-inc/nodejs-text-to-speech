@@ -13,43 +13,52 @@
  * limitations under the License.
  */
 
-'use strict';
+'use strict'
 
 // [START vision_quickstart]
-const fs = require('fs');
+const fs = require('fs')
 
 // Imports the Google Cloud client library
-const textToSpeech = require('@google-cloud/text-to-speech');
+const textToSpeech = require('@google-cloud/text-to-speech')
 
 // Creates a client
-const client = new textToSpeech.TextToSpeechClient();
+const client = new textToSpeech.TextToSpeechClient()
 
 // The text to synthesize
-const text = 'Hello, world!';
+const ssml = `<speak>
+  <prosody rate="x-slow" pitch="-5st">Can you hear me now?</prosody>
+  <prosody rate="x-high" pitch="2st">Can you hear me now?</prosody>
+</speak>`
+// const text = 'Hello, world!';
 
 // Construct the request
 const request = {
-  input: {text: text},
+  input: {ssml: ssml},
+  // input: {text: text},
   // Select the language and SSML Voice Gender (optional)
-  voice: {languageCode: 'en-US', ssmlGender: 'NEUTRAL'},
+  voice: {
+    languageCode: 'en-us',
+    name: 'en-US-Wavenet-C',
+    ssmlGender: 'FEMALE'
+  },
   // Select the type of audio encoding
-  audioConfig: {audioEncoding: 'MP3'},
-};
+  audioConfig: {audioEncoding: 'MP3'}
+}
 
 // Performs the Text-to-Speech request
 client.synthesizeSpeech(request, (err, response) => {
   if (err) {
-    console.error('ERROR:', err);
-    return;
+    console.error('ERROR:', err)
+    return
   }
 
   // Write the binary audio content to a local file
   fs.writeFile('output.mp3', response.audioContent, 'binary', err => {
     if (err) {
-      console.error('ERROR:', err);
-      return;
+      console.error('ERROR:', err)
+      return
     }
-    console.log('Audio content written to file: output.mp3');
-  });
-});
+    console.log('Audio content written to file: output.mp3')
+  })
+})
 // [END vision_quickstart]
