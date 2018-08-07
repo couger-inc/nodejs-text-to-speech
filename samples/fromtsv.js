@@ -13,68 +13,68 @@
  * limitations under the License.
  */
 
-'use strict';
+'use strict'
 
 // [START vision_quickstart]
-const fs = require('fs');
+const fs = require('fs')
 
 // Imports the Google Cloud client library
-const textToSpeech = require('@google-cloud/text-to-speech');
+const textToSpeech = require('@google-cloud/text-to-speech')
 
 // Creates a client
-const client = new textToSpeech.TextToSpeechClient();
+const client = new textToSpeech.TextToSpeechClient()
 
 // Read audio list tsv
-const csvParse = require('csv-parse');
-let rs = null;
+const csvParse = require('csv-parse')
+let rs = null
 try {
-  rs = fs.createReadStream('audio_list_jp_20180720_1.tsv', 'utf-8');
+  rs = fs.createReadStream('audio_list_20180806.tsv', 'utf-8')
   rs.on('error', err => {
-    console.error(err);
-    throw err;
+    console.error(err)
+    throw err
   })
 } catch (err) {
-  console.error(err);
-  throw err;
+  console.error(err)
+  throw err
 }
-const parser = csvParse({delimiter: '\t'});
+const parser = csvParse({delimiter: '\t'})
 parser.on('data', data => {
   const outputfile = `Voice/voice_${data[0]}.mp3`
   const request = {
     input: {
-      text: data[1],
+      text: data[1]
     },
     voice: {
-      languageCode: 'ja-JP',
-      name: 'ja-JP-Wavenet-A',
-      ssmlGender: 'FEMALE',
-      // languageCode: 'en-us',
-      // name: 'en-US-Wavenet-C',
-      // ssmlGender: 'FEMALE',
+      // languageCode: 'ja-JP',
+      // name: 'ja-JP-Wavenet-A',
+      // ssmlGender: 'FEMALE'
+      languageCode: 'en-us',
+      name: 'en-US-Wavenet-F',
+      ssmlGender: 'FEMALE'
     },
     audioConfig: {
-      audioEncoding: 'MP3',
-    },
-  };
+      audioEncoding: 'MP3'
+    }
+  }
   // Performs the Text-to-Speech request
   client.synthesizeSpeech(request, (err, response) => {
     if (err) {
-      console.error('ERROR:', err);
+      console.error('ERROR:', err)
       return
     }
 
     // Write the binary audio content to a local file
     fs.writeFile(outputfile, response.audioContent, 'binary', err => {
       if (err) {
-        console.error('ERROR:', err);
+        console.error('ERROR:', err)
         return
       }
-      console.log(`Audio content written to file: ${outputfile}`);
+      console.log(`Audio content written to file: ${outputfile}`)
     })
-  });
+  })
 })
 parser.on('error', err => {
-  console.error(err);
-  throw err;
+  console.error(err)
+  throw err
 })
-rs.pipe(parser);
+rs.pipe(parser)
